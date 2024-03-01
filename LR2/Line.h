@@ -26,7 +26,8 @@ public:
     Point getP2() { return this->p2; }
 
     std::string toString() {
-        return "Line: " + p1.toString() + " - " + p2.toString();
+        // FP - first point, SP - second point
+        return "FP: " + p1.toString() + "/SP: " + p2.toString();
     }
 
     Point intersectionWithXAxis() {
@@ -35,13 +36,7 @@ public:
         return {xIntersect, 0};
     }
 
-    Point intersectionWithYAxis() {
-        double yIntersect = (this->p1.getX() * this->p2.getY() -
-                             this->p2.getX() * this->p1.getY()) / (this->p1.getX() - this->p2.getX());
-        return {0, yIntersect};
-    }
-
-    Line intersectionWithLine(Line &l) {
+    Point intersectionWithLine(Line &l) {
         double a1, a2, b1, b2, c1, c2;
         double x1, y1, x2, y2, x3, y3, x4, y4;
         x1 = this->p1.getX();
@@ -65,6 +60,12 @@ public:
         double yIntersect = (a2 * c1 - a1 * c2) / det;
 
         return {xIntersect, yIntersect};
+    }
+
+    Point intersectionWithYAxis() {
+        double yIntersect = (this->p1.getX() * this->p2.getY() -
+                             this->p2.getX() * this->p1.getY()) / (this->p1.getX() - this->p2.getX());
+        return {0, yIntersect};
     }
 
     Line operator+(Line &line) const {
