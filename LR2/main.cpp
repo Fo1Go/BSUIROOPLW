@@ -24,10 +24,16 @@ using std::string, std::vector, std::cin, std::cout, std::endl, std::getline, st
 
 Point getPoint() {
     double x, y;
-    cout << "Enter X point: " << endl;
-    cin >> x;
-    cout << "Enter Y point: " << endl;
-    cin >> y;
+    try {
+        cout << "Enter X point: " << endl;
+        cin >> x;
+        cout << "Enter Y point: " << endl;
+        cin >> y;
+    }
+    catch(...) {
+        throw std::invalid_argument("Letters or special symbols in enter.");
+    }
+
     return Point(x, y);
 }
 
@@ -64,9 +70,15 @@ int main() {
         if (chooseCommand == 0) {
             is_running = false;
         } else if (chooseCommand == 1) {
-            Point p1 = getPoint();
-            Point p2 = getPoint();
-            lines.emplace_back(Line(p1, p2));
+            Point point1, point2;
+            try {
+                point1 = getPoint();
+                point2 = getPoint();
+            } catch(...) {
+                cout << "Error in enter the points!!!" << endl;
+                continue;
+            }
+            lines.emplace_back(Line(point1, point2));
         } else if (chooseCommand == 2) {
             for (int index = 0; index < lines.size(); index++)
                 cout << "Line " << index << ": " << lines[index].toString() << endl;

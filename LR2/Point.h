@@ -18,6 +18,7 @@ public:
     }
 
     void setX(double xVal) {
+
         this->x = xVal;
     }
 
@@ -34,7 +35,9 @@ public:
     }
 
     std::string toString() {
-        return "(" + std::to_string(this->x) + ", " + std::to_string(this->y) + ")";
+        std::string X = std::to_string(this->getX());
+        std::string Y = std::to_string(this->getY());
+        return "(" + X.substr(0, X.find(".")+3) + ", " + Y.substr(0, Y.find(".")+3) + ")";
     }
 
     Point operator+(Point point) const {
