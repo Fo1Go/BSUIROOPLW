@@ -11,17 +11,38 @@ private:
     std::string from_place;
     std::string to_place;
     int count_places_in_airplane{};
+    int leftFreePlaces{};
+    double costOneTicket{};
+
 public:
     Flight(std::string airplane_name,
            std::string from_place,
            std::string to_place,
-           int count_places_in_airplane) {
+           int count_places_in_airplane,
+           int costOneTicket) {
         this->airplane_name = std::move(airplane_name);
         this->from_place = std::move(from_place);
         this->to_place = std::move(to_place);
         this->count_places_in_airplane = count_places_in_airplane;
+        this->costOneTicket = costOneTicket;
     }
-    Flight() : Flight("undefined", "undefined", "undefined", 0) {}
+    Flight() : Flight("undefined", "undefined", "undefined", 0, 1000) {}
+
+    int getLeftFreePlaces() {
+        return this->leftFreePlaces;
+    }
+
+    void setLeftFreePlaces(int count) {
+        this->leftFreePlaces = count;
+    }
+
+    double getCostOneTicket() {
+        return this->costOneTicket;
+    }
+
+    void setCostOneTicket(double cost) {
+        this->costOneTicket = cost;
+    }
 
     void setFromPlace(std::string place) {
         this->from_place = std::move(place);
@@ -37,6 +58,14 @@ public:
 
     std::string getToPlace() {
         return this->to_place;
+    }
+
+    int getCountPlaces() {
+        return this->count_places_in_airplane;
+    }
+
+    void setCountPlaces(int count) {
+        this->count_places_in_airplane = count;
     }
 };
 
