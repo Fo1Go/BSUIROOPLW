@@ -1,11 +1,12 @@
 //
 // Created by prost on 15.02.2024.
 //
-#include <iostream>
-#include <string>
-
 #ifndef LR2_POINT_H
 #define LR2_POINT_H
+
+#include <iostream>
+#include <string>
+#include "utils.h"
 
 class Point {
 private:
@@ -35,9 +36,22 @@ public:
     }
 
     std::string toString() {
-        std::string X = std::to_string(this->getX());
-        std::string Y = std::to_string(this->getY());
-        return "(" + X.substr(0, X.find(".")+3) + ", " + Y.substr(0, Y.find(".")+3) + ")";
+        std::string XString, YString;
+        if (isCloseToInt(this->getX())) {
+            XString = std::to_string((int)this->getX());
+        } else {
+            std::string X = std::to_string(this->getX());
+            XString = X.substr(0, X.find(".") + 3);
+        }
+
+        if (isCloseToInt(this->getY())) {
+            YString = std::to_string((int)this->getY());
+        } else {
+            std::string Y = std::to_string(this->getY());
+            YString = Y.substr(0, Y.find(".") + 3);
+        }
+
+        return "(" + XString + ", " + YString + ")";
     }
 
     Point operator+(Point point) const {

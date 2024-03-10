@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(LR2 main.cpp
         Point.h
-        Line.h)
+        Line.h
+        utils.h)
