@@ -10,9 +10,8 @@
 #include "Client.h"
 #include "Flight.h"
 
-using std::cout, std::cin, std::endl, std::string, std::vector, std::thread, std::mutex;
+//mutex gMUTEX;
 
-mutex gMUTEX;
 // Разработать многопоточное приложение.
 // Все сущности, желающие получить доступ к ресурсу, должны быть потоками.
 //
@@ -21,7 +20,10 @@ mutex gMUTEX;
 // и уменьшения количества билетов. Бронирование действует 10 минут.
 // Если не поступает оплата в течение этого времени, другой пользователь может забронировать эти же билеты.
 
-void checkPayment(vector<Ticket*> &tickets, int &duration) {
+using std::cout, std::cin, std::endl, std::string, std::vector, std::thread, std::mutex;
+
+
+void checkPayment(vector<Ticket *> &tickets, int &duration) {
     std::random_device rd;
     std::mt19937 mt(rd());
     int timeToCheck = duration;
@@ -43,9 +45,11 @@ void checkPayment(vector<Ticket*> &tickets, int &duration) {
                 if ((client->getBalance() - ticket->getCountTickets() * flight->getCostOneTicket()) > 0 &&
                     !ticket->getPaidStatus()) {
                     if (isPaid(mt)) {
-                        cout << "Client - " << client->getName() << " is paid his ticket " << ticket->toString() << endl;
+                        cout << "Client - " << client->getName() << " is paid his ticket " << ticket->toString()
+                             << endl;
                         ticket->setPaidStatus(true);
-                        client->setBalance(client->getBalance() - ticket->getCountTickets() * flight->getCostOneTicket());
+                        client->setBalance(
+                                client->getBalance() - ticket->getCountTickets() * flight->getCostOneTicket());
                     }
                 }
             }
@@ -57,7 +61,7 @@ void checkPayment(vector<Ticket*> &tickets, int &duration) {
 
 }
 
-void checkReservation(vector<Ticket*> &tickets, int &duration) {
+void checkReservation(vector<Ticket *> &tickets, int &duration) {
     Ticket *ticket;
     while (true) {
         std::this_thread::sleep_for(std::chrono::seconds(duration));
@@ -82,8 +86,8 @@ void checkReservation(vector<Ticket*> &tickets, int &duration) {
     }
 }
 
-void checkInToReservation(int &time_in_reservation, vector<Ticket*> &tickets, vector<Client*> &clients,
-                          vector<Flight*> &flights) {
+void checkInToReservation(int &time_in_reservation, vector<Ticket *> &tickets, vector<Client *> &clients,
+                          vector<Flight *> &flights) {
     std::this_thread::sleep_for(std::chrono::seconds(time_in_reservation));
 
     std::random_device rd;
@@ -99,45 +103,45 @@ void checkInToReservation(int &time_in_reservation, vector<Ticket*> &tickets, ve
     tickets.emplace_back(ticket);
 }
 
-thread createThreadCheckPayment(vector<Ticket*> &tickets, int &duration) {
+thread createThreadCheckPayment(vector<Ticket *> &tickets, int &duration) {
     thread t([&]() { checkPayment(tickets, duration); });
     return t;
 }
 
-thread createThreadCheckReservation(vector<Ticket*> &tickets, int &duration) {
+thread createThreadCheckReservation(vector<Ticket *> &tickets, int &duration) {
     thread t([&]() { checkReservation(tickets, duration); });
     return t;
 }
 
-thread createThreadNewClient(int &timeToReservation, vector<Ticket*> &tickets, vector<Client*> &clients,
-                             vector<Flight*> &flights) {
+thread createThreadNewClient(int &timeToReservation, vector<Ticket *> &tickets, vector<Client *> &clients,
+                             vector<Flight *> &flights) {
     thread t([&]() { checkInToReservation(timeToReservation, tickets, clients, flights); });
     return t;
 }
 
-void watchAllTickets(vector<Ticket*> &tickets) {
+void watchAllTickets(vector<Ticket *> &tickets) {
     cout << "All tickets:" << endl;
     std::for_each(tickets.begin(), tickets.end(),
-                  [](Ticket* n) { cout << n->toString() << " Is paid?: " << n->getPaidStatus() << '\n'; });
+                  [](Ticket *n) { cout << n->toString() << " Is paid?: " << n->getPaidStatus() << '\n'; });
 }
 
-void watchAllClients(vector<Client*> &clients) {
+void watchAllClients(vector<Client *> &clients) {
     cout << "All tickets:" << endl;
     std::for_each(clients.begin(), clients.end(),
-                  [](Client* n) { cout << n->toString() << '\n'; });
+                  [](Client *n) { cout << n->toString() << '\n'; });
 }
 
 int main() {
-    vector<Client*> clients;
-    vector<Flight*> flights{
-        new Flight("Boing 777889", "Minsk", "Astana", 122, 1000),
-        new Flight("Boing 777889", "Minsk", "Astana", 122, 1000),
-        new Flight("Boing 777889", "Kiev", "Moscow", 122, 1000),
-        new Flight("Boing 777889", "Berlin", "Minsk", 122, 1000),
-        new Flight("Boing 777889", "Copenhagen", "Minsk", 122, 1000),
-        new Flight("Boing 777889", "Moscow", "Minsk", 122, 1000)
+    vector<Client *> clients;
+    vector<Flight *> flights{
+            new Flight("Boing 777889", "Minsk", "Astana", 122, 1000),
+            new Flight("Boing 777889", "Minsk", "Astana", 122, 1000),
+            new Flight("Boing 777889", "Kiev", "Moscow", 122, 1000),
+            new Flight("Boing 777889", "Berlin", "Minsk", 122, 1000),
+            new Flight("Boing 777889", "Copenhagen", "Minsk", 122, 1000),
+            new Flight("Boing 777889", "Moscow", "Minsk", 122, 1000)
     };
-    vector<Ticket*> tickets;
+    vector<Ticket *> tickets;
 
     for (int i = 0; i < 10; i++) {
         std::random_device rd;
@@ -171,5 +175,5 @@ int main() {
     t1.detach();
     t2.detach();
 
-        return 0;
-    }
+    return 0;
+}

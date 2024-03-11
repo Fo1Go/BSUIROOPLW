@@ -1,4 +1,0 @@
-C:\Users\prost\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=C:/Users/prost/AppData/Local/Programs/CLion/bin/ninja/win/x64/ninja.exe -G Ninja -S D:\information\university\OOP\LR4 -B D:\information\university\OOP\LR4\cmake-build-debug
--- Configuring done (0.7s)
--- Generating done (0.0s)
--- Build files have been written to: D:/information/university/OOP/LR4/cmake-build-debug

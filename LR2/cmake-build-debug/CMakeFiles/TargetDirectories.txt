@@ -1,3 +1,0 @@
-D:/information/university/OOP/LR2/cmake-build-debug/CMakeFiles/LR2.dir
-D:/information/university/OOP/LR2/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/information/university/OOP/LR2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
