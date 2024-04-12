@@ -83,7 +83,7 @@ public:
     }
 
     std::string toString() {
-        return "(" + std::to_string(reservationTime) + ", "
+        return "Ticket(" + std::to_string(reservationTime) + ", "
                + flight->getFromPlace()+ ", "
                + flight->getToPlace() + ")" ;
     }

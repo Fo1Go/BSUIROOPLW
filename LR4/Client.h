@@ -45,9 +45,10 @@ public:
         return this->account_balance;
     }
     std::string toString() {
-        return this->getName()
-        + "|" + std::to_string(this->getAge())
-        + "|" + std::to_string(this->getBalance());
+        return "Client("
+        + this->getName()
+        + ", " + std::to_string(this->getAge())
+        + ")";
     }
 };
 

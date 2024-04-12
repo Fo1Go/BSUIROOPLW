@@ -35,6 +35,7 @@ void checkPayment(vector<Ticket *> &tickets, int &duration) {
         try {
 //            gMUTEX.lock();
             std::uniform_int_distribution<int> isPaid(0, 1);
+            bool isPaidStatus;
             if (tickets.empty()) {
                 continue;
             }
@@ -44,12 +45,11 @@ void checkPayment(vector<Ticket *> &tickets, int &duration) {
                 flight = ticket->getFlight();
                 if ((client->getBalance() - ticket->getCountTickets() * flight->getCostOneTicket()) > 0 &&
                     !ticket->getPaidStatus()) {
-                    if (isPaid(mt)) {
-                        cout << "Client - " << client->getName() << " is paid his ticket " << ticket->toString()
-                             << endl;
+                    isPaidStatus = (bool)isPaid(mt);
+                    if (isPaidStatus) {
+                        cout << client->toString() << " have been paid ticket " << ticket->toString() << endl;
                         ticket->setPaidStatus(true);
-                        client->setBalance(
-                                client->getBalance() - ticket->getCountTickets() * flight->getCostOneTicket());
+                        client->setBalance(client->getBalance() - ticket->getCountTickets() * flight->getCostOneTicket());
                     }
                 }
             }
@@ -72,11 +72,13 @@ void checkReservation(vector<Ticket *> &tickets, int &duration) {
             }
             for (int index = 0; index < tickets.size(); index++) {
                 ticket = tickets[index];
-//                cout << ticket->toString() << endl;
-                ticket->reservesionTimeDecrease(duration);
-                if (ticket->isReservationOut()) {
-                    cout << "This ticket is out of reservation: " << ticket->toString() << endl;
-                    tickets.erase(tickets.begin() + index);
+                if (!ticket->getPaidStatus()) {
+                    cout << ticket->toString() << endl;
+                    ticket->reservesionTimeDecrease(duration);
+                    if (ticket->isReservationOut()) {
+                        cout << "This ticket is out of reservation: " << ticket->toString() << endl;
+                        tickets.erase(tickets.begin() + index);
+                    }
                 }
             }
 //            gMUTEX.lock();
@@ -101,6 +103,7 @@ void checkInToReservation(int &time_in_reservation, vector<Ticket *> &tickets, v
     Ticket *ticket = new Ticket(flights[randomFlight(mt)], client, countTickets(mt));
     clients.emplace_back(client);
     tickets.emplace_back(ticket);
+    cout << client->toString() << " have been reserved the ticket " << ticket->toString() << "\n";
 }
 
 thread createThreadCheckPayment(vector<Ticket *> &tickets, int &duration) {
@@ -159,18 +162,11 @@ int main() {
     thread t1 = createThreadCheckReservation(tickets, durationCheckReservation);
     thread t2 = createThreadCheckPayment(tickets, durationCheckPayment);
 
-    cout << "Enter 1 to watch all tickets: " << endl;
+    cout << "Enter /q to quit from program: " << endl;
     while (true) {
         std::cin >> userInput;
-        if (userInput == "/q") {
+        if (userInput == "/q")
             break;
-        } else if (userInput[0] == '1') {
-            watchAllTickets(tickets);
-        } else if (userInput[0] == '2') {
-            watchAllClients(clients);
-        } else {
-            cout << "Unknown command!" << endl;
-        }
     }
     t1.detach();
     t2.detach();
